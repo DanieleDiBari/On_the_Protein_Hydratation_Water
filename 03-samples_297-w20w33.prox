@@ -1,0 +1,228 @@
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   *)             Re-define some constants'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+print, 'constant already defined:''
+print, 's  =  1-16,357-362     ; bad spectra numbers to remove... '
+print, 'v  =  0.890             ; vanadium transmission'
+print, 'd  =  0.93              ; MBP + D2O transmission'
+print, 'h  =  0.91              ; MBP + H2O transmission'
+print, 'e  =  0.05				; Rebin to constant dE = e'
+print, 'q  =  0.1 				; Rebin to S(Q,w) grid for given dQ = q'
+print, 'f  =  -25 				; minimun of the energy considered [meV]'
+print, ''
+print, ''
+print, ''
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   6)             MBP + H2O at 297 K'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+print, '; 6.1) load data (already normalized to monitor or time X 1000)'
+print, '; ---------------------------------------------------------------------'
+
+w20 = rdrun('123400_123401.hdf')
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 6.2) remove bad spectra'
+print, '; ---------------------------------------------------------------------'
+
+w20 = in5_remove_spectra(w20,badSpectra=s, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 6.3) vanadium correction to empty cell'
+print, '; ---------------------------------------------------------------------'
+
+w21 = w20 - h * w2 
+e21 = sqrt(e20^2 + (h * e2)^2)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';  6.4) Correct for self-shielding/self-absorption'
+print, ';  (VF. Sears like) for vanadium'
+print, ';'
+print, '; thick   = thickness'
+print, '; angle   = slab angle'
+print, '; rin     = cylinder inner radius [mm]'
+print, '; rout    = cylinder outer radius [mm]'
+print, '; sigma_a = absorption cross section'
+print, '; sigma_s = total scattering cross section'
+print, '; rho     = density'
+print, '; Mass    = atomic mass'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w22 = in5_safcorr(w21, thic = 0.023, angle = 135.0, sigma_a = 6160.37, sigma_s = 336927, rho = 1.4, Mass = 54700, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 6.5)  Normalize by the elastic peak of the vanadium'
+print, ';'
+print, '; ' 
+print, ';       (vnorm correct the vana from DWF first.)'
+print, ';'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w23 = in5_vnorm(w22, w5, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 6.6) Correction for detector wavelength-efficiency +'
+print, ';      remove flat bkgd.'
+print, ';      /psd means take the same correction for all IN5 angles'
+print, ';      that was not the case for the former IN5 with the 3 different'
+print, ';      type of detectors - reduced to 2 in SAF corrections.'
+print, ';'
+print, ';      Other solution : mimic IN6 with rdset, inst="in6"'
+print, ';      Warning: for corrtof only.'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w23 = in5_corrtof(w23, /deteff, /psd, /background , /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 6.7) Conversion to from S(2*theta,tof) to S(2*theta, E)'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w24 = in5_t2e(w23, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 6.8) Rebin to constant dE = e '
+print, ';'
+print, '; ---------------------------------------------------------------------'
+ 
+w25 = reb(w24, dE = e)
+print, ''              
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 6.9) Rebin to S(Q,w) grid for given dQ and minimum energy'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+w26 = sqw_rebin(w25, dQ = q, Emin = f)
+print, ''
+print, ''
+print, ''
+
+
+
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   7)             MBP + D2O at 297 K'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+print, '; 7.1) load data (already normalized to monitor or time X 1000)'
+print, '; ---------------------------------------------------------------------'
+
+w27 = rdrun('123497_123500.hdf')
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 7.2) remove bad spectra'
+print, '; ---------------------------------------------------------------------'
+
+w27 = in5_remove_spectra(w27, badSpectra = s, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 7.3) vanadium correction to empty cell'
+print, '; ---------------------------------------------------------------------'
+
+w28 = w27 - d * w2 
+e28 = sqrt(e27^2 + (d * e2)^2)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';  7.4) Correct for self-shielding/self-absorption'
+print, ';  (VF. Sears like) for vanadium'
+print, ';'
+print, '; thick   = thickness'
+print, '; angle   = slab angle'
+print, '; rin     = cylinder inner radius [mm]'
+print, '; rout    = cylinder outer radius [mm]'
+print, '; sigma_a = absorption cross section'
+print, '; sigma_s = total scattering cross section'
+print, '; rho     = density'
+print, '; Mass    = atomic mass'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w29 = in5_safcorr(w28, thick = 0.023, angle = 135.0, sigma_a = 4658.54, sigma_s = 217852, rho = 1.4, Mass = 56296, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 7.5)  Normalize by the elastic peak of the vanadium'
+print, ';'
+print, '; ' 
+print, ';       (vnorm correct the vana from DWF first.)'
+print, ';'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w30 = in5_vnorm(w29, w5, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 7.6) Correction for detector wavelength-efficiency +'
+print, ';      remove flat bkgd.'
+print, ';      /psd means take the same correction for all IN5 angles'
+print, ';      that was not the case for the former IN5 with the 3 different'
+print, ';      type of detectors - reduced to 2 in SAF corrections.'
+print, ';'
+print, ';      Other solution : mimic IN6 with rdset, inst="in6"'
+print, ';      Warning: for corrtof only.'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w30 = in5_corrtof(w30, /deteff, /psd, /background , /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 7.7) Conversion to from S(2*theta,tof) to S(2*theta, E)'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w31 = in5_t2e(w30, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 7.8) Rebin to constant dE = e '
+print, ';'
+print, '; ---------------------------------------------------------------------'
+ 
+w32 = reb(w31, dE = e)
+print, ''                
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 7.9) Rebin to S(Q,w) grid for given dQ and minimum energy'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+w33 = sqw_rebin(w32, dQ = q, Emin = f)
+print, ''
+print, ''
+print, ''
+
+

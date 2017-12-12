@@ -1,0 +1,129 @@
+; ---------------------------------------------------------------------
+;
+;
+;   Macro for the datas reduction of MBP+D2O and MBP+H20  
+;   To be used after the basic data reduction as made with "@reduce"
+;
+;
+;  Last revised: JOR (ollivier@ill.eu), Mon Aug 31 16:37:07 CEST 2009
+; ---------------------------------------------------------------------
+
+RDSET,inst="IN5"            
+;RDSET,base="Current Path"            
+
+; ---------------------------------------------------------------------
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   *)             Define some constants'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+s  = '1-16,357-362'     ; bad spectra numbers to remove... 
+v  =  0.890             ; vanadium transmission
+
+print, 's  =  1-16,357-362     ; bad spectra numbers to remove... '
+print, 'v  =  0.890             ; vanadium transmission'
+
+print, ''
+print, ''
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   1)             Empty Cell 1 at 150 K'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+print, '; 1.1) load data (already normalized to monitor or time X 1000)'
+print, '; ---------------------------------------------------------------------'
+
+w1 = rdrun('123460_123463.hdf')
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 1.2) remove bad spectra'
+print, '; ---------------------------------------------------------------------'
+
+w1 = in5_remove_spectra(w1,badSpectra=s, /verbose)
+
+print, ''
+print, ''
+print, ''
+
+
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   2)             Empty Cell 4 at 297 K'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+print, '; 2.1) load data (not normalized to monitor)'
+print, '; ---------------------------------------------------------------------'
+
+w2 = rdrun('123471_123472.hdf')
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 2.2) remove bad spectra'
+print, '; ---------------------------------------------------------------------'
+
+w2 = in5_remove_spectra(w2, badSpectra = s, /verbose)
+
+print, ''
+print, ''
+print, ''
+
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   3)             Vanadium at 160 K'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+print, '; 3.1) load sample (already normalized to monitor or time X 1000)'
+print, '; ---------------------------------------------------------------------'
+
+w3 = rdrun('123535_123536.hdf')
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 3.2) remove bad spectra'
+print, '; ---------------------------------------------------------------------'
+
+w3 = in5_remove_spectra(w3, badSpectra = s, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 3.3) vanadium correction to empty cell'
+print, '; ---------------------------------------------------------------------'
+
+w4 = w3 - v * w1
+e4 = sqrt(e3^2 + (v * e1)^2)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';  3.4) Correct for self-shielding/self-absorption'
+print, ';  (VF. Sears like) for vanadium'
+print, ';'
+print, '; thick   = thickness'
+print, '; angle   = slab angle'
+print, '; rin     = cylinder inner radius [mm]'
+print, '; rout    = cylinder outer radius [mm]'
+print, '; sigma_a = absorption cross section'
+print, '; sigma_s = total scattering cross section'
+print, '; rho     = density'
+print, '; Mass    = atomic mass'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w5 = in5_safcorr(w4, thick=1, angle=135.0, sigma_a=5.98, sigma_s=5.205, rho=5.96, Mass=50.941, /verbose)
+print, ''
+
+print, ''
+print, ''
+print, ''
+
+
+

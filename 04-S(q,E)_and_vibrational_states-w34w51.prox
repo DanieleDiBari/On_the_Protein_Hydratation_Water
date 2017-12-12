@@ -1,0 +1,133 @@
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   *)             Re-define some constants'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+a  =  20				; num. - 1 of the S(Q,E) choose
+m  =  0              	; variable utilized for find elastic maximum 
+p  =  0                 ; position of the maximum
+
+print, 'd  =  0.93              ; MBP + D2O transmission'
+print, 'h  =  0.91              ; MBP + H2O transmission'
+print, 'e  =  0.05				; Rebin to constant dE = e'
+
+print, 'constant already defined:''
+print, 's  =  1-16,357-362     ; bad spectra numbers to remove... '
+print, 'v  =  0.890             ; vanadium transmission'
+print, 'd  =  0.93              ; MBP + D2O transmission'
+print, 'h  =  0.91              ; MBP + H2O transmission'
+print, 'e  =  0.05				; Rebin to constant dE = e'
+print, 'q  =  0.1 				; Rebin to S(Q,w) grid for given dQ = q'
+print, 'f  =  -25 				; minimun of the energy considered [meV]'
+print, ''
+print, ''
+print, ''
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 8) Show the four S(2*theta,E)
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, ' w34 --> MBP + H2O at 150 K'
+w34 = w10		
+
+print, ' w35 --> MBP + D2O at 150 K'
+w35 = w17		
+
+print, ' w36 --> MBP + H2O at 297 K'
+w36 = w24		
+
+print, ' w37 --> MBP + D2O at 297 K'
+w37 = w31		
+
+print, ''
+print, ''
+print, ''
+
+
+
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 9) Show the four S(Q,E)
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, ' w38 --> MBP + H2O at 150 K'
+w38 = w12		
+
+print, ' w39 --> MBP + D2O at 150 K'
+w39 = w19		
+
+print, ' w40 --> MBP + H2O at 297 K'
+w40 = w26		
+
+print, ' w41 --> MBP + D2O at 297 K'
+w41 = w33		
+
+print, ''
+print, ''
+print, ''
+
+
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 10) Normalize S(Q,E) to the number of scatterer'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+w42 = w38(a,*)
+m = max(w42,min = o,p)
+print, m
+w44 = w42 / 843
+e44 = e42 / 843
+;w34 - 296
+
+w43 = w39(a,*)
+w45 = w43 / 643
+e45 = e43 / 643
+
+;w46 = w44 - w45
+;e46 = sqrt(e44^2 + e45^2)
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 11) g(E) in funz. anche dello angolo 2theta'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, 'w42 = gdos(w11)		; MBP + H2O at 150 K'
+;w42 = gdos(w11)		; MBP + H2O at 150 K
+print, ''
+
+w46 = w34(*,0)
+w47 = w34(*,1)
+w48 = w34(*,2)
+w46 = w34(*,3)
+w46 = w34(*,4)
+w50 = w35(*,0)
+w51 = w35(*,1)
+w52 = w35(*,2)
+w53 = w35(*,3)
+w54 = w35(*,4)
+
+;w43 = transpose(w34)
+;w44 = transpose(w35)
+;w45 = transpose(w38)
+;w46 = transpose(w39)
+
+
+
+;output_allqs, w38, file='w38'
+;output_allqs, w39, file='w39'
+
+
+print, ''
+print, ''
+print, ''
