@@ -118,7 +118,7 @@ print, '; Mass    = atomic mass'
 print, ';'
 print, '; ---------------------------------------------------------------------'
 
-w5 = in5_safcorr(w4, thick=1, angle=135.0, sigma_a=5.98, sigma_s=5.205, rho=5.96, Mass=50.941, /verbose)
+w5 = in5_safcorr(w4, thick=1, angle=135.0, sigma_a = 14.1389, sigma_s = 5.2054, rho = 5.96, Mass = 50.942, /verbose)
 print, ''
 
 print, ''

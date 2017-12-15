@@ -10,12 +10,26 @@ e  =  0.05				; Rebin to constant dE = e
 q  =  0.1 				; Rebin to S(Q,w) grid for given dQ = q
 f  =  -25 				; minimun of the energy considered [meV]
 
+x  =  6202.05			; Abs. cross-sec. MBP + H2O
+y  =  351774			; Scatt. cross-sec. MBP + H2O
+z  =  56296.6			; Molar Mass MBP + H2O
+
+a  =  4567.22			; Abs. cross-sec. MBP + D2O
+b  =  217852			; Scatt. cross-sec. MBP + D2O
+c  =  56296.6			; Molar Mass MBP + D2O
+
 print, 'd  =  0.93              ; MBP + D2O transmission'
 print, 'h  =  0.91              ; MBP + H2O transmission'
 print, 'e  =  0.05				; Rebin to constant dE = e'
 print, 'q  =  0.1 				; Rebin to S(Q,w) grid for given dQ = q'
 print, 'f  =  -25 				; minimun of the energy considered [meV]'
-print, 'constant already defined:''
+print, 'x  =  34739				; Abs. cross-sec. MBP + H2O'
+print, 'y  =  2897628			; Scatt. cross-sec. MBP + H2O'
+print, 'z  =  329984			; Molar Mass MBP + H2O'
+print, 'a  =  4702				; Abs. cross-sec. MBP + D2O'
+print, 'b  =  516119			; Scatt. cross-sec. MBP + D2O'
+print, 'c  =  361897			; Molar Mass MBP + D2O'
+print, 'constant already defined:'
 print, 's  =  1-16,357-362     ; bad spectra numbers to remove... '
 print, 'v  =  0.890             ; vanadium transmission'
 print, ''
@@ -66,7 +80,7 @@ print, '; Mass    = atomic mass'
 print, ';'
 print, '; ---------------------------------------------------------------------'
 
-w8 = in5_safcorr(w7, thick=0.023, angle=135.0, sigma_a=6160.37, sigma_s=336927, rho=1.4, Mass=54700, /verbose)
+w8 = in5_safcorr(w7, thick = 0.023, angle = 135.0, sigma_a = x, sigma_s = y, rho = 1.4, Mass = z, /verbose)
 print, ''
 
 print, '; ---------------------------------------------------------------------'
@@ -171,7 +185,7 @@ print, '; Mass    = atomic mass'
 print, ';'
 print, '; ---------------------------------------------------------------------'
 
-w15 = in5_safcorr(w14, thick = 0.023, angle = 135.0, sigma_a = 4658.54, sigma_s = 217852, rho = 1.4, Mass = 56296, /verbose)
+w15 = in5_safcorr(w14, thick = 0.023, angle = 135.0, sigma_a = a, sigma_s = b, rho = 1.4, Mass = c, /verbose)
 print, ''
 
 
@@ -226,7 +240,7 @@ print, ''
 
 print, '; ---------------------------------------------------------------------'
 print, ';'
-print, '; 4.9) Rebin to S(Q,w) grid for given dQ and minimum energy'
+print, '; 5.9) Rebin to S(Q,w) grid for given dQ and minimum energy'
 print, ';'   
 print, '; ---------------------------------------------------------------------'
 
