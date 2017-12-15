@@ -1,0 +1,141 @@
+d  =  0.93              ; MBP + D2O transmission
+h  =  0.91              ; MBP + H2O transmission
+e  =  0.05				; Rebin to constant dE = e
+q  =  0.1 				; Rebin to S(Q,w) grid for given dQ = q
+f  =  -25 				; minimun of the energy considered [meV]
+
+;senza div per 20
+x  =  4658			; Abs. cross-sec. MBP + H2O
+y  =  217851			; Scatt. cross-sec. MBP + H2O
+z  =  56296			; Molar Mass MBP + H2O
+
+a  =  4702				; Abs. cross-sec. MBP + D2O
+b  =  516119			; Scatt. cross-sec. MBP + D2O
+c  =  361897			; Molar Mass MBP + D2O
+
+;con div per 20
+;x  =  6160				; Abs. cross-sec. MBP + H2O
+;y  =  336927			; Scatt. cross-sec. MBP + H2O
+;z  =  54700				; Molar Mass MBP + H2O
+
+;a  =  4658				; Abs. cross-sec. MBP + D2O
+;b  =  217851			; Scatt. cross-sec. MBP + D2O
+;c  =  56296				; Molar Mass MBP + D2O
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   4)             MBP + H2O at 150 K'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+print, '; 4.1) load data (already normalized to monitor or time X 1000)'
+print, '; ---------------------------------------------------------------------'
+
+w6 = rdrun('123510_123522.hdf')
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 4.2) remove bad spectra'
+print, '; ---------------------------------------------------------------------'
+
+w6 = in5_remove_spectra(w6,badSpectra=s, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 4.3) vanadium correction to empty cell'
+print, '; ---------------------------------------------------------------------'
+
+w7 = w6 - h * w1 
+e7 = sqrt(e6^2 + (h * e1)^2)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';  4.4) Correct for self-shielding/self-absorption'
+print, ';  (VF. Sears like) for vanadium'
+print, ';'
+print, '; thick   = thickness'
+print, '; angle   = slab angle'
+print, '; rin     = cylinder inner radius [mm]'
+print, '; rout    = cylinder outer radius [mm]'
+print, '; sigma_a = absorption cross section'
+print, '; sigma_s = total scattering cross section'
+print, '; rho     = density'
+print, '; Mass    = atomic mass'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w8 = in5_safcorr(w7, thick = 0.023, angle = 135.0, sigma_a = x, sigma_s = y, rho = 1.4, Mass = z, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 4.5)  Normalize by the elastic peak of the vanadium'
+print, ';'
+print, '; ' 
+print, ';       (vnorm correct the vana from DWF first.)'
+print, ';'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w9 = in5_vnorm(w8, w5, /verbose)
+print, ''
+
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   5)             MBP + D2O at 150 K'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+print, '; 5.1) load data (already normalized to monitor or time X 1000)'
+print, '; ---------------------------------------------------------------------'
+
+w13 = rdrun('123510_123522.hdf')
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 5.2) remove bad spectra'
+print, '; ---------------------------------------------------------------------'
+
+w13 = in5_remove_spectra(w13, badSpectra = s, /verbose)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, '; 5.3) sample correction to empty cell'
+print, '; ---------------------------------------------------------------------'
+
+w14 = w13 - d * w1 
+e14 = sqrt(e13^2 + (d * e1)^2)
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';  5.4) Correct for self-shielding/self-absorption'
+print, ';  (VF. Sears like) for vanadium'
+print, ';'
+print, '; thick   = thickness'
+print, '; angle   = slab angle'
+print, '; rin     = cylinder inner radius [mm]'
+print, '; rout    = cylinder outer radius [mm]'
+print, '; sigma_a = absorption cross section'
+print, '; sigma_s = total scattering cross section'
+print, '; rho     = density'
+print, '; Mass    = atomic mass'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w15 = in5_safcorr(w14, thick = 0.023, angle = 135.0, sigma_a = a, sigma_s = b, rho = 1.4, Mass = c, /verbose)
+print, ''
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 5.5)  Normalize by the elastic peak of the vanadium'
+print, ';'
+print, '; ' 
+print, ';       (vnorm correct the vana from DWF first.)'
+print, ';'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+w16 = in5_vnorm(w15, w5, /verbose)
+print, ''

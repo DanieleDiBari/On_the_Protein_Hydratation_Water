@@ -1,0 +1,22 @@
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 8) Show the four S(2*theta,E)
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, ' w34 --> MBP + H2O at 150 K'
+w34 = w11	
+
+print, ' w35 --> MBP + D2O at 150 K'
+w35 = w18	
+
+print, ' w36 --> MBP + H2O at 297 K'
+w36 = w24		
+
+print, ' w37 --> MBP + D2O at 297 K'
+w37 = w31		
+
+print, ''
+print, ''
+print, ''
