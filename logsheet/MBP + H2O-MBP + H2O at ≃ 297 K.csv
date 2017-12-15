@@ -1,0 +1,13 @@
+[File: 123400_123401.hdf],,,,,,,,,,,,,,,,,,,,
+ Wavelength [Å], Start time,,,, End time,,,, Duration [sec],, Temperature [K],Regulation Temp. [K], DetSum,, DetRate, MonSum,, MonRate, Elastic peak [ToF], SRot
+of incident neutron,Day,Time,,,Day,Time,,,measured,calculated,,,Total num. of neutron,,Neutron rate,Total neutron num. of MONITOR,,Neutron rate of MONITOR,,
+,,h,min,sec,,h,min,sec,,,,,measured,calculated,,measured,calculated,,,
+5,22/06/2015,12,12,21,22/06/2015,12,42,41,1800.01,1820,296.421,296.999,1.22701E+07,1.22684E+07,6816.7,1.43123E+06,1.43119E+06,795.122,295,-1443
+5,22/06/2015,12,42,45,22/06/2015,13,13,5,1800.01,1820,296.155,296.998,1.22666E+07,1.22684E+07,6814.74,1.43116E+06,1.43119E+06,795.083,295,-1443
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,Average,,,,Average,,,Average,,
+,,,,,,,,,,,296.29,,,,6815.72,,,795.10,,
+,,,,,,,,,,,Dev. Stand.,,,,Dev. Stand.,,,Dev. Stand.,,
+,,,,,,,,,,,0.19,,,,1.4,,,0.03,,
+,,,,,,,,,,,Percent. err.,,,,Percent. err.,,,Percent. err.,,
+,,,,,,,,,,,0.06,,,,0.02,,,0.003,,

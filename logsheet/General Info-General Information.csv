@@ -1,0 +1,27 @@
+Transmission,,,,,,Total rate of monitor,,
+Sample (calcolated),,Cell                 (considered negligible) ,Vanadium,,,Average,Dev. Stand.,Percent. err.
+MBP + H2O,MBP + D20,,,,,3533,2431,68.8
+0.91,0.93,1,0.89,,,Note: all datas are already normalized to monitor,,
+,,,,,,,,
+Note: the transmission error is considered negligible,,,,,,,,
+,,,,,,,,
+Cell’s size,,,,,Sample,,,
+Length [cm],Heigh [cm],Thickness [cm],Volume [ cm3 ],,Density [ g/cm3 ],Mass [g],Effective Volume [ cm3 ],Effective Thickness [cm]
+3,5,0.02,0.3,,1.4,0.05,0.0357,0.0024
+,,,,,,,,
+Solution,Cross section,,Hydratation [%],N. of Inch. Scatterer Center (N. of H or V atoms),,Molar Mass of the System (Protein + Hydration Water),,Molar Mass of the Dry System  [g/mol]
+,Scattering [barn],Absorption           [barn],,,,,,
+MBP + H2O,351774.63,6202.05,0.4,4039.67,,56296.64,,40212
+MBP + D2O,217852.32,4567.22,0.4,2254,,56296.64,,40212
+MBP + Malt + H2O,354958.26,6236.27,0.4,4076.87,,56775.86,,40554
+MBP + Malt + D2O,219895.94,4587.52,0.4,2276,,56775.86,,40554
+Vanadium,5.2054,14.1389,0,1,,50.942,,50.942
+,,,,,,,,
+Note: hydratation is equal to the ratio of the weight of solvent over the weight of solute ( e.g. h = 0.4 g of water /  1 g of MBP ),,,, ,Molar Mass of the solvent [g / mol],,,
+,,,,,H2O,18.01534,D2O,19.9994
+,,,,,,,,
+Boltzmann constant [meV / K],Temperature [K],Thermal Energy [meV],,Maltose,,,,
+0.0861673324,150,12.92509986,,Chemical composition,,Molar Mass [g / mol],,
+Thermal Energy at room temperature (300 K),,,,H,22,342.30,,
+25.85019972,,,,C,12,,,
+,,,,O,11,,,
