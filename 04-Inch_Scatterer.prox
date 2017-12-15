@@ -1,0 +1,42 @@
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, ';   *)             Re-define some constants'
+print, ';'
+print, '; ---------------------------------------------------------------------'
+
+print, 'constant already defined:'
+print, 's  =  1-16,357-362     ; bad spectra numbers to remove... '
+print, 'v  =  0.890             ; vanadium transmission'
+print, 'd  =  0.93              ; MBP + D2O transmission'
+print, 'h  =  0.91              ; MBP + H2O transmission'
+print, 'e  =  0.05				; Rebin to constant dE = e'
+print, 'q  =  0.1 				; Rebin to S(Q,w) grid for given dQ = q'
+print, 'f  =  -25 				; minimun of the energy considered [meV]'
+print, 'x  =  34739				; Abs. cross-sec. MBP + H2O'
+print, 'y  =  2897628			; Scatt. cross-sec. MBP + H2O'
+print, 'z  =  329984			; Molar Mass MBP + H2O'
+print, 'a  =  4702				; Abs. cross-sec. MBP + D2O'
+print, 'b  =  516119			; Scatt. cross-sec. MBP + D2O'
+print, 'c  =  361897			; Molar Mass MBP + D2O'
+print, ''
+print, ''
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 8) Getting the number of Inch. Scatterer'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, 'from S(2*theta,E)'
+w20 = w11(259,*)	; 260-1 --> energy index of the el. peak
+w21 = w18(259,*)	
+
+print, 'from S(Q,E)'
+w22 = w12(*,191)	; 192-1 --> energy index of the el. peak
+w23 = w19(*,191)		
+
+print, ''
+print, ''
+print, ''
