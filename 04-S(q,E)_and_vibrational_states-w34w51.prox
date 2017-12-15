@@ -4,15 +4,17 @@ print, ';   *)             Re-define some constants'
 print, ';'
 print, '; ---------------------------------------------------------------------'
 
-a  =  20				; num. - 1 of the S(Q,E) choose
-m  =  0              	; variable utilized for find elastic maximum 
-p  =  0                 ; position of the maximum
+a  =  20			; num. - 1 of the S(Q,E) choose
+m  =  4039.67      	; H atoms in MBP + H2O 
+p  =  2254 			; H atoms in MBP + D2O
+g  =  800.05		; Measured number of Inch. Scatterer in MBP + H2O (Q bw 0.4 and 1.3 Ang^-1)
+i  =  375.89 		; Measured number of Inch. Scatterer in MBP + D2O (Q bw 0.4 and 1.3 Ang^-1))
 
 print, 'd  =  0.93              ; MBP + D2O transmission'
 print, 'h  =  0.91              ; MBP + H2O transmission'
 print, 'e  =  0.05				; Rebin to constant dE = e'
 
-print, 'constant already defined:''
+print, 'constant already defined:'
 print, 's  =  1-16,357-362     ; bad spectra numbers to remove... '
 print, 'v  =  0.890             ; vanadium transmission'
 print, 'd  =  0.93              ; MBP + D2O transmission'
@@ -20,55 +22,75 @@ print, 'h  =  0.91              ; MBP + H2O transmission'
 print, 'e  =  0.05				; Rebin to constant dE = e'
 print, 'q  =  0.1 				; Rebin to S(Q,w) grid for given dQ = q'
 print, 'f  =  -25 				; minimun of the energy considered [meV]'
+print, 'x  =  34739				; Abs. cross-sec. MBP + H2O'
+print, 'y  =  2897628			; Scatt. cross-sec. MBP + H2O'
+print, 'z  =  329984			; Molar Mass MBP + H2O'
+print, 'a  =  4702				; Abs. cross-sec. MBP + D2O'
+print, 'b  =  516119			; Scatt. cross-sec. MBP + D2O'
+print, 'c  =  361897			; Molar Mass MBP + D2O'
 print, ''
 print, ''
 print, ''
-
-
-print, '; ---------------------------------------------------------------------'
-print, ';'
-print, '; 8) Show the four S(2*theta,E)
-print, ';'   
-print, '; ---------------------------------------------------------------------'
-
-print, ' w34 --> MBP + H2O at 150 K'
-w34 = w10		
-
-print, ' w35 --> MBP + D2O at 150 K'
-w35 = w17		
-
-print, ' w36 --> MBP + H2O at 297 K'
-w36 = w24		
-
-print, ' w37 --> MBP + D2O at 297 K'
-w37 = w31		
-
-print, ''
-print, ''
-print, ''
-
-
 
 
 
 print, '; ---------------------------------------------------------------------'
 print, ';'
-print, '; 9) Show the four S(Q,E)
+print, '; 9) Show the four S(2*theta,E)'
 print, ';'   
 print, '; ---------------------------------------------------------------------'
 
-print, ' w38 --> MBP + H2O at 150 K'
-w38 = w12		
+print, ' w20 --> MBP + H2O at 150 K'
+w20 = w11	
 
-print, ' w39 --> MBP + D2O at 150 K'
-w39 = w19		
+print, ' w21 --> MBP + D2O at 150 K'
+w21 = w18
+print, ''
 
-print, ' w40 --> MBP + H2O at 297 K'
-w40 = w26		
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 10) Normalize S(2*theta,E) to the number of scatterer'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
 
-print, ' w41 --> MBP + D2O at 297 K'
-w41 = w33		
+print, 'MBP + H2O'
+w22 = (m / g) * w20;(a,*)		; MBP + H2O
+e22 = (m / g) * e20;(a,*)		; Error prop.
 
+print, 'MBP + D2O'
+w23 = (p / i) * w21;(a,*) 		; MBP + D2O 
+e23 = (p / i) * e21;(a,*)		; Error prop.
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 11) S(2*theta,E) of H2O'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+w24 = w22 - w23
+e24 = sqrt(e22^2 + e23^2)		; Error prop.
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 12) g(E) - integrated on theta to reduce the noise/signal ratio'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, 'MBP + H2O at 150 K'
+w25 = gdos(w22)				; MBP + H2O at 150 K
+w55 = total(w25(*,0:100),2)
+print, ''
+
+print, 'MBP + D2O at 150 K'
+w26 = gdos(w23)				
+w56 = total(w26(*,0:100),2)			; MBP + D2O at 150 K
+print, ''
+
+print, 'H2O at 150 K'
+w27 = gdos(w24)				
+w57 = total(w27(*,0:100),2)			; H2O at 150 K
 print, ''
 print, ''
 print, ''
@@ -78,54 +100,93 @@ print, ''
 
 print, '; ---------------------------------------------------------------------'
 print, ';'
-print, '; 10) Normalize S(Q,E) to the number of scatterer'
+print, '; 13) Show the four S(Q,E) on the elastic peak'
 print, ';'   
 print, '; ---------------------------------------------------------------------'
 
-w42 = w38(a,*)
-m = max(w42,min = o,p)
-print, m
-w44 = w42 / 843
-e44 = e42 / 843
-;w34 - 296
+print, ' w28 --> MBP + H2O at 150 K'
+w28 = w12	
 
-w43 = w39(a,*)
-w45 = w43 / 643
-e45 = e43 / 643
+print, ' w29 --> MBP + D2O at 150 K'
+w29 = w19
+print, ''	
 
-;w46 = w44 - w45
-;e46 = sqrt(e44^2 + e45^2)
 
 print, '; ---------------------------------------------------------------------'
 print, ';'
-print, '; 11) g(E) in funz. anche dello angolo 2theta'
+print, '; 14) Normalize S(Q,E) to the number of scatterer'
 print, ';'   
 print, '; ---------------------------------------------------------------------'
 
-print, 'w42 = gdos(w11)		; MBP + H2O at 150 K'
-;w42 = gdos(w11)		; MBP + H2O at 150 K
+print, 'MBP + H2O'
+w30 = (m / g) * w28;(a,*)		; MBP + H20 
+e30 = (m / g) * e28;(a,*)		; Error prop.
+
+print, 'MBP + D2O'
+w31 = (p / i) * w29;(a,*) 		; MBP + D20 
+e31 = (p / i) * e29;(a,*)		; Error prop.
 print, ''
 
-w46 = w34(*,0)
-w47 = w34(*,1)
-w48 = w34(*,2)
-w46 = w34(*,3)
-w46 = w34(*,4)
-w50 = w35(*,0)
-w51 = w35(*,1)
-w52 = w35(*,2)
-w53 = w35(*,3)
-w54 = w35(*,4)
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 15) S(Q,E) of H2O'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+w32 = w30 - w31
+e32 = sqrt(e30^2 + e30^2)		; Error prop.
+print, ''
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 16) Find the anael. peak'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, 'Anael. peak of MBP + H2O'
+w33 = w28(10:22,80:201)
+w33 = transpose(w33)
+
+print, 'Anael. peak of MBP'
+w34 = w29(10:22,80:201)
+w34 = transpose(w34)
+
+print, 'Anael. peak of H2O'
+w35 = w32(10:22,80:201)
+w35 = transpose(w35)
+
+
+print, '; ---------------------------------------------------------------------'
+print, ';'
+print, '; 17) g(E) at Q fixed = 2.1 Ang.^-1'
+print, ';'   
+print, '; ---------------------------------------------------------------------'
+
+print, 'Vibrational Density of the states - MBP'
+w36 = y31 * (exp(y31/12.925) - 1) * w31(21,*)
+
+print, 'Vibrational Density of the states - MBP'
+w36 = y31 * (exp(y31/12.925) - 1) * w31(21,*)
+
+print, 'Vibrational Density of the states - MBP'
+w36 = y31 * (exp(y31/12.925) - 1) * w31(21,*)
+
+
+;w46 = w34(*,0)
+;w47 = w34(*,1)
+;w48 = w34(*,2)
+;w49 = w34(*,3)
+;w50 = w34(*,4)
+;w51 = w35(*,0)
+;w52 = w35(*,1)
+;w53 = w35(*,2)
+;w54 = w35(*,3)
+;w55 = w35(*,4)
 
 ;w43 = transpose(w34)
 ;w44 = transpose(w35)
 ;w45 = transpose(w38)
 ;w46 = transpose(w39)
-
-
-
-;output_allqs, w38, file='w38'
-;output_allqs, w39, file='w39'
 
 
 print, ''
