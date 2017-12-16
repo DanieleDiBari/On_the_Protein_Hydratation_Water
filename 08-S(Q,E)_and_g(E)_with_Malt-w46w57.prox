@@ -1,0 +1,119 @@
+
+;
+;  File open:
+;  >>>>  08-S(Q,E)_and_g(E)_with_Malt-w46w57.prox  <<<<
+;
+
+
+; ---------------------------------------------------------------------
+;
+;   *)             Re-define some constants
+;
+; ---------------------------------------------------------------------
+
+a  =  20			; num. - 1 of the S(Q,E) choose
+m  =  4076.87      	; H atoms in MBP + Malt + H2O 
+p  =  2276 			; H atoms in MBP + Malt + D2O
+g  =  716.81		; Measured number of Inch. Scatterer in MBP + Malt + H2O (Q bw 0.5 and 1.4 Ang^-1)
+i  =  212.58 		; Measured number of Inch. Scatterer in MBP + Malt + D2O (Q bw 0.5 and 1.4 Ang^-1)
+
+; Constant already defined:
+;  |  s  =  1-16,357-362     	; bad spectra numbers to remove... 
+;  |  v  =  0.890             	; vanadium transmission
+;  |  d  =  0.93          		; MBP + D2O transmission
+;  |  h  =  0.91           		; MBP + H2O transmission
+;  |  e  =  0.05				; Rebin to constant dE=e
+;  |  q  =  0.1 				; Rebin to S(Q,w) grid for given dQ=q
+;  |  f  =  -25 				; min. of the energy (25meV = 2kT)
+;  |  x  =  6236.27				; Abs. cross-sec. MBP + Malt + H2O
+;  |  y  =  354958				; Scatt. cross-sec. MBP + Malt + H2O
+;  |  z  =  56775.9				; Molar Mass MBP + Malt + H2O
+;  |  a  =  4587.52				; Abs. cross-sec. MBP + Malt + D2O
+;  |  b  =  219896				; Scatt. cross-sec. MBP + Malt + D2O
+;  |  c  =  56775.9				; Molar Mass MBP + Malt + D2O
+; ---------------------------------------------------------------------
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+; 18) Normalize S(2*theta,E) to the number of scatterer
+;
+; ---------------------------------------------------------------------
+
+; w37 = S(2*theta,E) of MBP + Malt + H2O
+w46 = (m / g) * w37		
+e46 = (m / g) * e37				; Error prop.
+
+; w44 = S(2*theta,E) of MBP + Malt + D2O
+w47 = (p / i) * w44;(a,*) 		
+e47 = (p / i) * e44;(a,*)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 19) S(2*theta,E) of H2O
+;
+; ---------------------------------------------------------------------
+
+w48 = w46 - w47
+e48 = sqrt(e46^2 + e47^2)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 20) g(E) - integrated on theta to reduce the noise/signal ratio
+;
+; ---------------------------------------------------------------------
+
+; MBP + Malt + H2O
+w49 = gdos(w46)				
+w49 = total(w49(*,0:100),2)
+
+; MBP + Malt
+w50 = gdos(w47)				
+w50 = total(w50(*,0:100),2)			
+
+; H2O (solute: MBP + Malt)
+w51 = gdos(w48)				
+w51 = total(w51(*,0:100),2)			
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+; 21) Normalize S(Q,E) to the number of scatterer
+;
+; ---------------------------------------------------------------------
+
+; w38 = S(Q,E) of MBP + Malt + H2O
+w52 = (m / g) * w38;(a,*)		
+e52 = (m / g) * e38;(a,*)		; Error prop.
+
+; w45 = S(Q,E) of MBP + Malt + D2O
+w53 = (p / i) * w45;(a,*) 		
+e53 = (p / i) * e45;(a,*)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 22) S(Q,E) of H2O - solute: MBP + Malt
+;
+; ---------------------------------------------------------------------
+
+w54 = w52 - w53
+e54 = sqrt(e52^2 + e53^2)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 23) g(E) at Q fixed = 2.1 Ang.^-1
+;
+; ---------------------------------------------------------------------
+
+;  >>>  Vibrational Density of the states of MBP + Malt + H2O
+w55 = y52 * (exp(y52/12.9251) - 1) * w52(21,*)
+
+;  >>>  Vibrational Density of the states of MBP + Malt
+w56 = y53 * (exp(y53/12.9251) - 1) * w53(21,*)
+
+;  >>>  Vibrational Density of the states of H2O (solute: MBP + Malt)
+w57 = y54 * (exp(y54/12.9251) - 1) * w54(21,*)

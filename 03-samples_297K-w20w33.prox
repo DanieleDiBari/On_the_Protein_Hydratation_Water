@@ -1,0 +1,187 @@
+
+;
+;  File open:
+;  >>>>  03-samples_297K-w20w33.prox  <<<<
+;
+
+; ---------------------------------------------------------------------
+;
+;   *)             Re-define some constants
+;
+; ---------------------------------------------------------------------
+
+; Constant already defined:
+;  |  s  =  1-16,357-362 		; bad spectra numbers to remove... 
+;  |  v  =  0.890           	; vanadium transmission
+;  |  d  =  0.93          		; MBP + D2O transmission
+;  |  h  =  0.91           		; MBP + H2O transmission
+;  |  e  =  0.05				; Rebin to constant dE=e
+;  |  q  =  0.1 				; Rebin to S(Q,w) grid for given dQ=q
+;  |  f  =  -25 				; min. of the energy (25meV = 2kT)
+;  |  x  =  6202.05				; Abs. cross-sec. MBP + H2O
+;  |  y  =  351774				; Scatt. cross-sec. MBP + H2O
+;  |  z  =  56296.6				; Molar Mass MBP + H2O
+;  |  a  =  4567.22				; Abs. cross-sec. MBP + D2O
+;  |  b  =  217852				; Scatt. cross-sec. MBP + D2O
+;  |  c  =  56296.6				; Molar Mass MBP + D2O
+; ---------------------------------------------------------------------
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+;   6)             MBP + H2O at 297 K
+;
+; ---------------------------------------------------------------------
+; 6.1) load data (already normalized to monitor or time X 1000)
+; ---------------------------------------------------------------------
+
+w20 = rdrun('123400_123401.hdf')
+
+; ---------------------------------------------------------------------
+; 6.2) remove bad spectra
+; ---------------------------------------------------------------------
+
+w20 = in5_remove_spectra(w20, badSpectra = s)
+
+; ---------------------------------------------------------------------
+; 6.3) vanadium correction to empty cell
+; ---------------------------------------------------------------------
+
+w21 = w20 - h * w2 
+e21 = sqrt(e20^2 + (h * e2)^2)
+
+; ---------------------------------------------------------------------
+; 6.4) Correct for self-shielding/self-absorption
+;      (VF. Sears like) for sample
+;
+;      thick   = thickness
+;      angle   = slab angle
+;      rin     = cylinder inner radius [mm]
+;      rout    = cylinder outer radius [mm]
+;      sigma_a = absorption cross section
+;      sigma_s = total scattering cross section
+;      rho     = density
+;      Mass    = atomic mass
+; ---------------------------------------------------------------------
+
+w22 = in5_safcorr(w21, thic = 0.024, angle = 135.0, sigma_a = x, sigma_s = y, rho = 1.4, Mass = z)
+
+; ---------------------------------------------------------------------
+; 6.5)  Normalize by the elastic peak of the vanadium
+;       (vnorm correct the vana from DWF first.)
+; ---------------------------------------------------------------------
+
+w23 = in5_vnorm(w22, w5)
+
+; ---------------------------------------------------------------------
+; 6.6) Correction for detector wavelength-efficiency +
+;      remove flat bkgd.
+;      /psd means take the same correction for all IN5 angles
+;      that was not the case for the former IN5 with the 3 different
+;      type of detectors - reduced to 2 in SAF corrections.
+;
+;      Other solution : mimic IN6 with rdset, inst="in6"
+;      Warning: for corrtof only.
+; ---------------------------------------------------------------------
+
+w23 = in5_corrtof(w23, /deteff, /psd, /background)
+
+; ---------------------------------------------------------------------
+; 6.7) Conversion to from S(2*theta,tof) to S(2*theta, E)
+; ---------------------------------------------------------------------
+
+w24 = in5_t2e(w23, w5, /average_elp)
+
+; ---------------------------------------------------------------------
+; 6.8) Rebin to constant dE = e 
+; ---------------------------------------------------------------------
+ 
+w25 = reb(w24, dE = e)
+
+; ---------------------------------------------------------------------
+; 6.9) Rebin to S(Q,w) grid for given dQ and minimum energy
+; ---------------------------------------------------------------------
+
+w26 = sqw_rebin(w25, dQ = q, Emin = f)
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+;   7)             MBP + D2O at 297 K
+;
+; ---------------------------------------------------------------------
+; 7.1) load data (already normalized to monitor or time X 1000)
+; ---------------------------------------------------------------------
+
+w27 = rdrun('123497_123500.hdf')
+
+; ---------------------------------------------------------------------
+; 7.2) remove bad spectra
+; ---------------------------------------------------------------------
+
+w27 = in5_remove_spectra(w27, badSpectra = s)
+
+; ---------------------------------------------------------------------
+; 7.3) vanadium correction to empty cell
+; --------------------------------------------------------------------
+
+w28 = w27 - d * w2 
+e28 = sqrt(e27^2 + (d * e2)^2)
+
+; ---------------------------------------------------------------------
+; 7.4) Correct for self-shielding/self-absorption
+;      (VF. Sears like) for sample
+;
+;      thick   = thickness
+;      angle   = slab angle
+;      rin     = cylinder inner radius [mm]
+;      rout    = cylinder outer radius [mm]
+;      sigma_a = absorption cross section
+;      sigma_s = total scattering cross section
+;      rho     = density
+;      Mass    = atomic mass
+; ---------------------------------------------------------------------
+
+w29 = in5_safcorr(w28, thick = 0.024, angle = 135.0, sigma_a = a, sigma_s = b, rho = 1.4, Mass = c)
+
+; ---------------------------------------------------------------------
+; 7.5)  Normalize by the elastic peak of the vanadium
+;       (vnorm correct the vana from DWF first.)
+; ---------------------------------------------------------------------
+
+w30 = in5_vnorm(w29, w5)
+
+; ---------------------------------------------------------------------
+; 7.6) Correction for detector wavelength-efficiency +
+;      remove flat bkgd.
+;      /psd means take the same correction for all IN5 angles
+;      that was not the case for the former IN5 with the 3 different
+;      type of detectors - reduced to 2 in SAF corrections.
+;
+;      Other solution : mimic IN6 with rdset, inst="in6"
+;      Warning: for corrtof only.
+; ---------------------------------------------------------------------
+
+w30 = in5_corrtof(w30, /deteff, /psd, /background)
+
+; ---------------------------------------------------------------------
+; 7.7) Conversion to from S(2*theta,tof) to S(2*theta, E)
+; ---------------------------------------------------------------------
+
+w31 = in5_t2e(w30, w5, /average_elp)
+
+; ---------------------------------------------------------------------
+; 7.8) Rebin to constant dE = e 
+; ---------------------------------------------------------------------
+ 
+w32 = reb(w31, dE = e)
+
+; ---------------------------------------------------------------------
+; 7.9) Rebin to S(Q,w) grid for given dQ and minimum energy
+; ---------------------------------------------------------------------
+
+w33 = sqw_rebin(w32, dQ = q, Emin = f)

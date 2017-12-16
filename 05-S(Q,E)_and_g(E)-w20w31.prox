@@ -1,0 +1,118 @@
+
+;
+;  File open:
+;  >>>>  05-S(Q,E)_and_g(E)-w20w31.prox  <<<<
+;
+
+; ---------------------------------------------------------------------
+;
+;   *)             Re-define some constants
+;
+; ---------------------------------------------------------------------
+
+a  =  20			; num. - 1 of the S(Q,E) choose
+m  =  4039.67      	; H atoms in MBP + H2O 
+p  =  2254 			; H atoms in MBP + D2O
+g  =  794.23		; Measured number of Inch. Scatterer in MBP + H2O (Q bw 0.5 and 1.4 Ang^-1)
+i  =  374.53 		; Measured number of Inch. Scatterer in MBP + D2O (Q bw 0.5 and 1.4 Ang^-1))
+
+; Constant already defined:
+;  |  s  =  1-16,357-362 		; bad spectra numbers to remove... 
+;  |  v  =  0.890           	; vanadium transmission
+;  |  d  =  0.93          		; MBP + D2O transmission
+;  |  h  =  0.91           		; MBP + H2O transmission
+;  |  e  =  0.05				; Rebin to constant dE=e
+;  |  q  =  0.1 				; Rebin to S(Q,w) grid for given dQ=q
+;  |  f  =  -25 				; min. of the energy (25meV = 2kT)
+;  |  x  =  6202.05				; Abs. cross-sec. MBP + H2O
+;  |  y  =  351774				; Scatt. cross-sec. MBP + H2O
+;  |  z  =  56296.6				; Molar Mass MBP + H2O
+;  |  a  =  4567.22				; Abs. cross-sec. MBP + D2O
+;  |  b  =  217852				; Scatt. cross-sec. MBP + D2O
+;  |  c  =  56296.6				; Molar Mass MBP + D2O
+; ---------------------------------------------------------------------
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+; 9) Normalize S(2*theta,E) to the number of scatterer
+;
+; ---------------------------------------------------------------------
+
+; w11 = S(2*theta,E) of MBP + H2O at 150 K
+w20 = (m / g) * w11		
+e20 = (m / g) * e11				; Error prop.
+
+; w18 = S(2*theta,E) of MBP + D2O
+w21 = (p / i) * w18;(a,*) 		
+e21 = (p / i) * e18;(a,*)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 10) S(2*theta,E) of H2O
+;
+; ---------------------------------------------------------------------
+
+w22 = w20 - w21
+e22 = sqrt(e20^2 + e21^2)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 11) g(E) - integrated on theta to reduce the noise/signal ratio
+;
+; ---------------------------------------------------------------------
+
+; MBP + H2O at 150 K
+w23 = gdos(w20)				
+w23 = total(w23(*,0:100),2)
+
+; MBP + D2O at 150 K'
+w24 = gdos(w21)				
+w24 = total(w24(*,0:100),2)			
+
+; H2O at 150 K'
+w25 = gdos(w22)				
+w25 = total(w25(*,0:100),2)			
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+; 12) Normalize S(Q,E) to the number of scatterer
+;
+; ---------------------------------------------------------------------
+
+; w12 = S(Q,E) of MBP + H2O at 150 K
+w26 = (m / g) * w12;(a,*)		
+e26 = (m / g) * e12;(a,*)		; Error prop.
+
+; w19 = S(Q,E) of MBP + D2O at 150 K
+w27 = (p / i) * w19;(a,*) 		
+e27 = (p / i) * e19;(a,*)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 13) S(Q,E) of H2O - solute: MBP
+;
+; ---------------------------------------------------------------------
+
+w28 = w26 - w27
+e28 = sqrt(e26^2 + e27^2)		; Error prop.
+
+; ---------------------------------------------------------------------
+;
+; 14) g(E) at Q fixed = 2.1 Ang.^-1
+;
+; ---------------------------------------------------------------------
+
+;  >>>  Vibrational Density of the states of MBP + H2O
+w29 = y26 * (exp(y26/12.9251) - 1) * w26(21,*)
+
+;  >>>  Vibrational Density of the states of MBP
+w30 = y27 * (exp(y27/12.9251) - 1) * w27(21,*)
+
+;  >>>  Vibrational Density of the states of H2O (solute: MBP)
+w31 = y28 * (exp(y28/12.9251) - 1) * w28(21,*)

@@ -1,0 +1,52 @@
+
+;
+;  File open:
+;  >>>>  09-anael_peak-w58w60.prox  <<<<
+;
+
+; ---------------------------------------------------------------------
+;
+;   *)             Re-define some constants
+;
+; ---------------------------------------------------------------------
+
+; Constant already defined:
+;  |  s  =  1-16,357-362   	; bad spectra numbers to remove... 
+;  |  v  =  0.890          	; vanadium transmission
+;  |  d  =  0.93          	; MBP + D2O transmission
+;  |  h  =  0.91           	; MBP + H2O transmission
+;  |  e  =  0.05			; Rebin to constant dE=e
+;  |  q  =  0.1 			; Rebin to S(Q,w) grid for given dQ=q
+;  |  f  =  -25 			; min. of the energy (25meV = 2kT)
+;  |  x  =  6236.27			; Abs. cross-sec. MBP + Malt + H2O
+;  |  y  =  354958			; Scatt. cross-sec. MBP + Malt + H2O
+;  |  z  =  56775.9			; Molar Mass MBP + Malt + H2O
+;  |  a  =  4587.52			; Abs. cross-sec. MBP + Malt + D2O
+;  |  b  =  219896			; Scatt. cross-sec. MBP + Malt + D2O
+;  |  c  =  56775.9			; Molar Mass MBP + Malt + D2O
+;  |  m  =  4076.87      	; H atoms in MBP + Malt + H2O 
+;  |  p  =  2276 			; H atoms in MBP + Malt + D2O
+;  |  g  =  713.52		; Inch. Scatterer MBP + Malt + H2O (0.5 - 1.4 Ang^-1)
+;  |  i  =  212.5 		; Inch. Scatterer MBP + Malt + D2O (Q bw 0.5 and 1.4 Ang^-1)
+; ---------------------------------------------------------------------
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+; 23) Find the anael. peak of the system without Maltose
+;
+; ---------------------------------------------------------------------
+
+; Anael. peak of MBP + H2O
+w58 = w26(10:22,80:201)
+w58 = transpose(w58)
+
+; Anael. peak of MBP
+w59 = w27(10:22,80:201)
+w59 = transpose(w59)
+
+; Anael. peak of H2O (solute: MBP)
+w60 = w28(10:22,80:201)
+w60 = transpose(w60)

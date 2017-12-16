@@ -1,0 +1,47 @@
+
+;
+;  File open:
+;  >>>>  04-Inch_Scatterer-w20w23.prox  <<<<
+;
+
+
+; ---------------------------------------------------------------------
+;
+;   *)             Re-define some constants
+;
+; ---------------------------------------------------------------------
+
+; Constant already defined:
+;  |  s  =  1-16,357-362 		; bad spectra numbers to remove... 
+;  |  v  =  0.890           	; vanadium transmission
+;  |  d  =  0.93          		; MBP + D2O transmission
+;  |  h  =  0.91           		; MBP + H2O transmission
+;  |  e  =  0.05				; Rebin to constant dE=e
+;  |  q  =  0.1 				; Rebin to S(Q,w) grid for given dQ=q
+;  |  f  =  -25 				; min. of the energy (25meV = 2kT)
+;  |  x  =  6202.05				; Abs. cross-sec. MBP + H2O
+;  |  y  =  351774				; Scatt. cross-sec. MBP + H2O
+;  |  z  =  56296.6				; Molar Mass MBP + H2O
+;  |  a  =  4567.22				; Abs. cross-sec. MBP + D2O
+;  |  b  =  217852				; Scatt. cross-sec. MBP + D2O
+;  |  c  =  56296.6				; Molar Mass MBP + D2O
+; ---------------------------------------------------------------------
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+; 8) Getting the number of Inch. Scatterer
+;
+; ---------------------------------------------------------------------
+
+;  from S(2*theta,E) 
+;  with 260-1 = energy index of the el. peak
+w20 = w11(259,*)	;   MBP + H2O
+w21 = w18(259,*)	;	MBP + D2O
+
+;  from S(Q,E)
+;  with 192-1 = energy index of the el. peak
+w22 = w12(*,191)	;   MBP + H2O
+w23 = w19(*,191)	;	MBP + D2O

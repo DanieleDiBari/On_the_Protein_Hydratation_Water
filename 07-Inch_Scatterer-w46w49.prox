@@ -1,0 +1,46 @@
+
+;
+;  File open:
+;  >>>>  07-Inch_Scatterer-w46w49.prox  <<<<
+;
+
+; ---------------------------------------------------------------------
+;
+;   *)             Re-define some constants
+;
+; ---------------------------------------------------------------------
+
+; Constant already defined:
+;  |  s  =  1-16,357-362     	; bad spectra numbers to remove... 
+;  |  v  =  0.890             	; vanadium transmission
+;  |  d  =  0.93          		; MBP + D2O transmission
+;  |  h  =  0.91           		; MBP + H2O transmission
+;  |  e  =  0.05				; Rebin to constant dE=e
+;  |  q  =  0.1 				; Rebin to S(Q,w) grid for given dQ=q
+;  |  f  =  -25 				; min. of the energy (25meV = 2kT)
+;  |  x  =  6236.27				; Abs. cross-sec. MBP + Malt + H2O
+;  |  y  =  354958				; Scatt. cross-sec. MBP + Malt + H2O
+;  |  z  =  56775.9				; Molar Mass MBP + Malt + H2O
+;  |  a  =  4587.52				; Abs. cross-sec. MBP + Malt + D2O
+;  |  b  =  219896				; Scatt. cross-sec. MBP + Malt + D2O
+;  |  c  =  56775.9				; Molar Mass MBP + Malt + D2O
+; ---------------------------------------------------------------------
+
+;
+;
+
+; ---------------------------------------------------------------------
+;
+; 17) Getting the number of Inch. Scatterer
+;
+; ---------------------------------------------------------------------
+
+;  from S(2*theta,E) 
+;  with 260-1 = energy index of the el. peak
+w46 = w37(259,*)	;   MBP + Malt + H2O
+w47 = w44(259,*)	;	MBP + Malt + D2O
+
+;  from S(Q,E)
+;  with 192-1 = energy index of the el. peak
+w48 = w38(*,191)	;   MBP + Malt + H2O
+w49 = w45(*,191)	;	MBP + Malt + D2O
