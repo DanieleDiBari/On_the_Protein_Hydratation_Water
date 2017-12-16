@@ -162,14 +162,14 @@ print, '; 17) g(E) at Q fixed = 2.1 Ang.^-1'
 print, ';'   
 print, '; ---------------------------------------------------------------------'
 
-print, 'Vibrational Density of the states - MBP'
-w36 = y31 * (exp(y31/12.925) - 1) * w31(21,*)
+print, 'Vibrational Density of the states - MBP+H2O'
+w36 = y30 * (exp(y30/12.925) - 1) * w30(21,*)
 
 print, 'Vibrational Density of the states - MBP'
-w36 = y31 * (exp(y31/12.925) - 1) * w31(21,*)
+w37 = y31 * (exp(y31/12.925) - 1) * w31(21,*)
 
-print, 'Vibrational Density of the states - MBP'
-w36 = y31 * (exp(y31/12.925) - 1) * w31(21,*)
+print, 'Vibrational Density of the states - H2O'
+w38 = y32 * (exp(y32/12.925) - 1) * w32(21,*)
 
 
 ;w46 = w34(*,0)
